@@ -1,3 +1,3 @@
-__all__ = ['core']
+__all__ = ['HTMLTestReport']
 
 from .core import HTMLTestReport
