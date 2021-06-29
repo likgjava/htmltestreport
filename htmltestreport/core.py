@@ -54,33 +54,10 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 __author__ = "outman"
 __version__ = "0.0.1"
 
-"""
-Change History
-Version 0.9.1
-* 用Echarts添加执行情况统计图 (灰蓝)
-Version 0.9.0
-* 改成Python 3.x (灰蓝)
-Version 0.8.3
-* 使用 Bootstrap稍加美化 (灰蓝)
-* 改为中文 (灰蓝)
-Version 0.8.2
-* Show output inline instead of popup window (Viorel Lupu).
-Version in 0.8.1
-* Validated XHTML (Wolfgang Borgert).
-* Added description of test classes and test cases.
-Version in 0.8.0
-* Define Template_mixin class for customization.
-* Workaround a IE 6 bug that it does not treat <script> block as CDATA.
-Version in 0.7.1
-* Back port to Python 2.3 (Frank Horowitz).
-* Fix missing scroll bars in detail log (Podi).
-"""
-
 
 import datetime
 import sys
 import io
-import time
 import unittest
 from xml.sax import saxutils
 from .template import Template_mixin as Template
@@ -123,7 +100,7 @@ class _TestResult(TestResult):
     # note: _TestResult is a pure representation of results.
     # It lacks the output and reporting ability compares to unittest._TextTestResult.
 
-    def __init__(self, verbosity=1):
+    def __init__(self):
         TestResult.__init__(self)
         self.stdout0 = None
         self.stderr0 = None
@@ -131,7 +108,6 @@ class _TestResult(TestResult):
         self.failure_count = 0
         self.error_count = 0
         self.skip_count = 0
-        self.verbosity = verbosity
 
         # result is a list of result in 4 tuple
         # (
@@ -179,12 +155,9 @@ class _TestResult(TestResult):
             TestResult.addSuccess(self, test)
             output = self.complete_output()
             self.result.append((0, test, output, ''))
-            if self.verbosity > 1:
-                sys.stderr.write('ok ')
-                sys.stderr.write(str(test))
-                sys.stderr.write('\n')
-            else:
-                sys.stderr.write('')
+            sys.stderr.write('ok ')
+            sys.stderr.write(str(test))
+            sys.stderr.write('\n')
 
     def addError(self, test, err):
         self.error_count += 1
@@ -192,12 +165,9 @@ class _TestResult(TestResult):
         _, _exc_str = self.errors[-1]
         output = self.complete_output()
         self.result.append((2, test, output, _exc_str))
-        if self.verbosity > 1:
-            sys.stderr.write('E  ')
-            sys.stderr.write(str(test))
-            sys.stderr.write('\n')
-        else:
-            sys.stderr.write('E')
+        sys.stderr.write('Error ')
+        sys.stderr.write(str(test))
+        sys.stderr.write('\n')
 
     def addFailure(self, test, err):
         self.failure_count += 1
@@ -205,22 +175,18 @@ class _TestResult(TestResult):
         _, _exc_str = self.failures[-1]
         output = self.complete_output()
         self.result.append((1, test, output, _exc_str))
-        if self.verbosity > 1:
-            sys.stderr.write('F  ')
-            sys.stderr.write(str(test))
-            sys.stderr.write('\n')
-        else:
-            sys.stderr.write('F')
+        sys.stderr.write('Failure ')
+        sys.stderr.write(str(test))
+        sys.stderr.write('\n')
 
     def addSkip(self, test, reason):
         self.skip_count += 1
         super().addSkip(test, reason)
         output = self.complete_output()
         self.result.append((3, test, output, ''))
-        sys.stderr.write('Skip  ')
+        sys.stderr.write('Skip ')
         sys.stderr.write(str(test))
         sys.stderr.write('\n')
-
 
     def addSubTest(self, test, subtest, err):
         if err is not None:
@@ -233,12 +199,9 @@ class _TestResult(TestResult):
                 output = self.complete_output()
                 self.result.append((1, test, output + '\nSubTestCase Failed:\n' + str(subtest),
                                     self._exc_info_to_string(err, subtest)))
-                if self.verbosity > 1:
-                    sys.stderr.write('F  ')
-                    sys.stderr.write(str(subtest))
-                    sys.stderr.write('\n')
-                else:
-                    sys.stderr.write('F')
+                sys.stderr.write('Failure ')
+                sys.stderr.write(str(subtest))
+                sys.stderr.write('\n')
             else:
                 self.error_count += 1
                 errors = self.errors
@@ -246,12 +209,9 @@ class _TestResult(TestResult):
                 output = self.complete_output()
                 self.result.append(
                     (2, test, output + '\nSubTestCase Error:\n' + str(subtest), self._exc_info_to_string(err, subtest)))
-                if self.verbosity > 1:
-                    sys.stderr.write('E  ')
-                    sys.stderr.write(str(subtest))
-                    sys.stderr.write('\n')
-                else:
-                    sys.stderr.write('E')
+                sys.stderr.write('Error ')
+                sys.stderr.write(str(subtest))
+                sys.stderr.write('\n')
             self._mirrorOutput = True
         else:
             self.subtestlist.append(subtest)
@@ -259,19 +219,15 @@ class _TestResult(TestResult):
             self.success_count += 1
             output = self.complete_output()
             self.result.append((0, test, output + '\nSubTestCase Pass:\n' + str(subtest), ''))
-            if self.verbosity > 1:
-                sys.stderr.write('ok ')
-                sys.stderr.write(str(subtest))
-                sys.stderr.write('\n')
-            else:
-                sys.stderr.write('')
+            sys.stderr.write('ok ')
+            sys.stderr.write(str(subtest))
+            sys.stderr.write('\n')
 
 
 class HTMLTestReport(object):
 
-    def __init__(self, file_path, verbosity=1, title=None, description=None):
+    def __init__(self, file_path, title=None, description=None):
         self.file_path = file_path
-        self.verbosity = verbosity
         if title is None:
             self.title = Template.DEFAULT_TITLE
         else:
@@ -285,7 +241,7 @@ class HTMLTestReport(object):
 
     def run(self, test):
         "Run the given test case or test suite."
-        result = _TestResult(self.verbosity)
+        result = _TestResult()
         test(result)
         self.stopTime = datetime.datetime.now()
         self.generateReport(test, result)
@@ -305,29 +261,6 @@ class HTMLTestReport(object):
             rmap[cls].append((n, t, o, e))
         r = [(cls, rmap[cls]) for cls in classes]
         return r
-
-    def getReportAttributes(self, result):
-        """
-        Return report attributes as a list of (name, value).
-        Override this to add custom attributes.
-        """
-        startTime = str(self.startTime)[:19]
-        duration = str(self.stopTime - self.startTime)
-        status = []
-        if result.success_count: status.append(u'通过 %s' % result.success_count)
-        if result.failure_count: status.append(u'失败 %s' % result.failure_count)
-        if result.error_count:   status.append(u'错误 %s' % result.error_count)
-        if status:
-            status = ' '.join(status)
-            self.passrate = str("%.2f%%" % (float(result.success_count) / float(
-                result.success_count + result.failure_count + result.error_count) * 100))
-        else:
-            status = 'none'
-        return [
-            (u'开始时间', startTime),
-            (u'运行时长', duration),
-            (u'测试结果', status + " 通过率= " + self.passrate),
-        ]
 
     def get_summary_data(self, result):
         """获取汇总数据"""
@@ -492,5 +425,3 @@ class HTMLTestReport(object):
 
     def _generate_ending(self):
         return Template.ENDING_TMPL
-
-
