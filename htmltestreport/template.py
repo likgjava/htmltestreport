@@ -1,12 +1,6 @@
-# ----------------------------------------------------------------------
-# Template
-
-
-class Template_mixin(object):
+class Template(object):
     """
-    Define a HTML template for report customerization and generation.
-    Overall structure of an HTML report
-    HTML
+    测试报告模板
     +------------------------+
     |<html>                  |
     |  <head>                |
@@ -50,9 +44,8 @@ class Template_mixin(object):
     DEFAULT_TITLE = '测试报告'
     DEFAULT_DESCRIPTION = ''
 
-    # ------------------------------------------------------------------------
     # HTML Template
-
+    # variables: (title, generator, stylesheet, heading, report, ending, chart_script)
     HTML_TMPL = r"""
 <!DOCTYPE html>
 <html lang="zh-CN">
@@ -109,7 +102,6 @@ class Template_mixin(object):
         for (var i = 0; i < count; i++) {
             tid = id_list[i];
             if (toHide) {
-                //document.getElementById('div_'+tid).style.display = 'none'
                 document.getElementById(tid).className = 'hiddenRow';
             }
             else {
@@ -120,7 +112,6 @@ class Template_mixin(object):
     function showTestDetail(div_id){
         var details_div = document.getElementById(div_id)
         var displayState = details_div.style.display
-        // alert(displayState)
         if (displayState == 'block' || displayState == '' ) {
             details_div.style.display = 'none'
         }
@@ -135,20 +126,6 @@ class Template_mixin(object):
         s = s.replace(/>/g,'&gt;');
         return s;
     }
-    /* obsoleted by detail in <div>
-    function showOutput(id, name) {
-        var w = window.open("", //url
-                        name,
-                        "resizable,scrollbars,status,width=800,height=450");
-        d = w.document;
-        d.write("<pre>");
-        d.write(html_escape(output_list[id]));
-        d.write("\n");
-        d.write("<a href='javascript:window.close()'>close</a>\n");
-        d.write("</pre>\n");
-        d.close();
-    }
-    */
     --></script>
     <div class="layui-container">
         %(heading)s
@@ -158,8 +135,10 @@ class Template_mixin(object):
     </div>
 </body>
 </html>
-"""  # variables: (title, generator, stylesheet, heading, report, ending, chart_script)
+"""
 
+    # 图表
+    # variables: (Pass, fail, error)
     ECHARTS_SCRIPT = r"""
     <script type="text/javascript">
         // 初始化echarts实例
@@ -250,37 +229,15 @@ class Template_mixin(object):
         myChart1.setOption(option1);
         myChart2.setOption(option2);
     </script>
-    """  # variables: (Pass, fail, error)
+    """
 
-    # ------------------------------------------------------------------------
     # Stylesheet
-    #
-    # alternatively use a <link> for external style sheet, e.g.
-    #   <link rel="stylesheet" href="$url" type="text/css">
-
     STYLESHEET_TMPL = """
 <style type="text/css">
-    .title {
-        width: auto;
-        height: 60px;
-        text-align: center;
-        font: bolder 38px/60px "Microsoft YaHei UI";
-        color: #009688;
-    }
-
-    .summary span {
-        font: normal 16px/38px "Microsoft YaHei UI";
-        margin-left: 20px;
-    }
-
-    .success-btn {
-        background-color: #28a745;
-    }
-
-    .skip-btn {
-        background-color: #84898c;
-    }
-    
+    .title { width: auto; height: 60px; text-align: center; font: bolder 38px/60px "Microsoft YaHei UI"; color: #009688; }
+    .summary span { font: normal 16px/38px "Microsoft YaHei UI"; margin-left: 20px; }
+    .success-btn { background-color: #28a745; }
+    .skip-btn { background-color: #84898c; }
     .passClass  { background-color: #bdedbc; }
     .failClass  { background-color: #ffefa4; }
     .errorClass { background-color: #ffc9c9; }
@@ -290,17 +247,13 @@ class Template_mixin(object):
     .errorCase  { color: #c00; font-weight: bold; }
     .hiddenRow  { display: none; }
     .testcase   { margin-left: 2em; }
-    
     .layui-table tbody tr:hover, .layui-table-click, .layui-table-header, .layui-table-hover, .layui-table-mend, .layui-table-patch, .layui-table-tool, .layui-table[lay-even] tr:nth-child(even) {
         background-color: transparent;
     }
 </style>
 """
 
-    # ------------------------------------------------------------------------
     # Heading
-    #
-
     HEADING_TMPL = r"""
     <!--报告标题-->
     <div class="title">%(title)s</div>
@@ -325,7 +278,6 @@ class Template_mixin(object):
                             <span class="text-dark">%(duration)s s</span>
                         </td>
                     </tr>
-
                     <tr>
                         <td>
                             <button type="button" class="layui-btn">用例总数</button>
@@ -365,16 +317,10 @@ class Template_mixin(object):
             </div>
         </div>
     </fieldset>
-"""  # variables: (title, parameters, description)
+"""
 
-    HEADING_ATTRIBUTE_TMPL = """<p class='attribute'><strong>%(name)s:</strong> %(value)s</p>
-    
-"""  # variables: (name, value)
-
-    # ------------------------------------------------------------------------
     # Report
-    #
-
+    # variables: (test_list, count, Pass, fail, error, passrate)
     REPORT_TMPL = u"""
     <fieldset class="layui-elem-field summary">
         <legend>详细信息</legend>
@@ -406,8 +352,9 @@ class Template_mixin(object):
             </table>
         </div>
 	</fieldset>
-"""  # variables: (test_list, count, Pass, fail, error, passrate)
+"""
 
+    # variables: (style, desc, count, Pass, fail, error, cid)
     REPORT_CLASS_TMPL = u"""
     <tr class='%(style)s'>
         <td class="text-center">%(desc)s</td>
@@ -418,8 +365,9 @@ class Template_mixin(object):
         <td class="text-center">%(skip)s</td>
         <td class="text-center"><button type="button" class="layui-btn layui-btn-xs" onclick="showClassDetail('%(cid)s',%(count)s)">详细</button></td>
     </tr>
-"""  # variables: (style, desc, count, Pass, fail, error, cid)
+"""
 
+    # variables: (tid, Class, style, desc, status)
     REPORT_TEST_WITH_OUTPUT_TMPL = r"""
 <tr id='%(tid)s' class='%(Class)s'>
     <td class='%(style)s'><div class='testcase'>%(desc)s</div></td>
@@ -428,36 +376,29 @@ class Template_mixin(object):
         %(status)s</a>
     </td>
     <td colspan='5'>
-    <!--css div popup start-->
-    
     <div id='div_%(tid)s' class="collapse in">
         <blockquote class="layui-elem-quote">
             <pre>%(script)s</pre>
         </blockquote>
     </div>
-    <!--css div popup end-->
     </td>
 </tr>
-"""  # variables: (tid, Class, style, desc, status)
+"""
 
+    # variables: (tid, Class, style, desc, status)
     REPORT_TEST_NO_OUTPUT_TMPL = r"""
 <tr id='%(tid)s' class='%(Class)s'>
     <td class='%(style)s'><div class='testcase'>%(desc)s</div></td>
     <td>%(status)s</td>
     <td colspan='5' align='center' style="color:#428bca"></td>
 </tr>
-"""  # variables: (tid, Class, style, desc, status)
+"""
 
     REPORT_TEST_OUTPUT_TMPL = r"""%(id)s: %(output)s"""  # variables: (id, output)
 
-    # ------------------------------------------------------------------------
     # ENDING
-    #
-
     ENDING_TMPL = """<div id='ending'>&nbsp;</div>
     <div style=" position:fixed;right:50px; bottom:30px; width:20px; height:20px;cursor:pointer">
     <a href="#"><span class="glyphicon glyphicon-eject" style = "font-size:30px;" aria-hidden="true">
     </span></a></div>
     """
-
-# -------------------- The end of the Template class -------------------

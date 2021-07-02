@@ -11,7 +11,7 @@ import sys
 import io
 from unittest import TestResult
 from xml.sax import saxutils
-from .template import Template_mixin as Template
+from .template import Template
 
 
 class OutputRedirector(object):
@@ -223,10 +223,9 @@ class HTMLTestReport(object):
     def generateReport(self, test, result):
         summary_data = self.get_summary_data(result)
         # report_attrs = self.getReportAttributes(result)
-        generator = 'HTMLTestRunner %s' % __version__
+        generator = 'HTMLTestReport %s' % __version__
         stylesheet = self._generate_stylesheet()
-        # heading = self._generate_heading(report_attrs)
-        heading = self._generate_heading_new(summary_data)
+        heading = self._generate_heading(summary_data)
         report = self._generate_report(result)
         ending = self._generate_ending()
         chart = self._generate_chart(result)
@@ -246,22 +245,7 @@ class HTMLTestReport(object):
     def _generate_stylesheet(self):
         return Template.STYLESHEET_TMPL
 
-    def _generate_heading(self, report_attrs):
-        a_lines = []
-        for name, value in report_attrs:
-            line = Template.HEADING_ATTRIBUTE_TMPL % dict(
-                name=saxutils.escape(name),
-                value=saxutils.escape(value),
-            )
-            a_lines.append(line)
-        heading = Template.HEADING_TMPL % dict(
-            title=saxutils.escape(self.title),
-            parameters=''.join(a_lines),
-            description=saxutils.escape(self.description),
-        )
-        return heading
-
-    def _generate_heading_new(self, summary_data):
+    def _generate_heading(self, summary_data):
         start_time, duration, total_count, passrate, success_count, failure_count, error_count, skip_count = summary_data
         heading = Template.HEADING_TMPL % dict(
             title=saxutils.escape(self.title),

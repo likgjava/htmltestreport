@@ -4,31 +4,14 @@
 <head>
     <meta charset="UTF-8">
     <title>TPshop接口自动化测试报告</title>
-    <meta name="generator" content="HTMLTestRunner 0.0.1"/>
+    <meta name="generator" content="HTMLTestReport 0.0.1"/>
     <link rel="stylesheet" href="http://unpkg.com/layui@2.6.8/dist/css/layui.css">
     
 <style type="text/css">
-    .title {
-        width: auto;
-        height: 60px;
-        text-align: center;
-        font: bolder 38px/60px "Microsoft YaHei UI";
-        color: #009688;
-    }
-
-    .summary span {
-        font: normal 16px/38px "Microsoft YaHei UI";
-        margin-left: 20px;
-    }
-
-    .success-btn {
-        background-color: #28a745;
-    }
-
-    .skip-btn {
-        background-color: #84898c;
-    }
-    
+    .title { width: auto; height: 60px; text-align: center; font: bolder 38px/60px "Microsoft YaHei UI"; color: #009688; }
+    .summary span { font: normal 16px/38px "Microsoft YaHei UI"; margin-left: 20px; }
+    .success-btn { background-color: #28a745; }
+    .skip-btn { background-color: #84898c; }
     .passClass  { background-color: #bdedbc; }
     .failClass  { background-color: #ffefa4; }
     .errorClass { background-color: #ffc9c9; }
@@ -38,7 +21,6 @@
     .errorCase  { color: #c00; font-weight: bold; }
     .hiddenRow  { display: none; }
     .testcase   { margin-left: 2em; }
-    
     .layui-table tbody tr:hover, .layui-table-click, .layui-table-header, .layui-table-hover, .layui-table-mend, .layui-table-patch, .layui-table-tool, .layui-table[lay-even] tr:nth-child(even) {
         background-color: transparent;
     }
@@ -91,7 +73,6 @@
         for (var i = 0; i < count; i++) {
             tid = id_list[i];
             if (toHide) {
-                //document.getElementById('div_'+tid).style.display = 'none'
                 document.getElementById(tid).className = 'hiddenRow';
             }
             else {
@@ -102,7 +83,6 @@
     function showTestDetail(div_id){
         var details_div = document.getElementById(div_id)
         var displayState = details_div.style.display
-        // alert(displayState)
         if (displayState == 'block' || displayState == '' ) {
             details_div.style.display = 'none'
         }
@@ -117,20 +97,6 @@
         s = s.replace(/>/g,'&gt;');
         return s;
     }
-    /* obsoleted by detail in <div>
-    function showOutput(id, name) {
-        var w = window.open("", //url
-                        name,
-                        "resizable,scrollbars,status,width=800,height=450");
-        d = w.document;
-        d.write("<pre>");
-        d.write(html_escape(output_list[id]));
-        d.write("\n");
-        d.write("<a href='javascript:window.close()'>close</a>\n");
-        d.write("</pre>\n");
-        d.close();
-    }
-    */
     --></script>
     <div class="layui-container">
         
@@ -150,14 +116,13 @@
                     <tr>
                         <td>
                             <button type="button" class="layui-btn">开始时间</button>
-                            <span class="text-dark">2021-06-29 20:17:07</span>
+                            <span class="text-dark">2021-07-02 18:29:57</span>
                         </td>
                         <td>
                             <button type="button" class="layui-btn">执行时间</button>
-                            <span class="text-dark">0:00:01.014602 s</span>
+                            <span class="text-dark">0:00:01.009259 s</span>
                         </td>
                     </tr>
-
                     <tr>
                         <td>
                             <button type="button" class="layui-btn">用例总数</button>
@@ -233,15 +198,12 @@
         通过</a>
     </td>
     <td colspan='5'>
-    <!--css div popup start-->
-    
     <div id='div_pt1.1' class="collapse in">
         <blockquote class="layui-elem-quote">
             <pre>pt1.1: result1= 2
 </pre>
         </blockquote>
     </div>
-    <!--css div popup end-->
     </td>
 </tr>
 
@@ -252,8 +214,6 @@
         失败</a>
     </td>
     <td colspan='5'>
-    <!--css div popup start-->
-    
     <div id='div_ft1.2' class="collapse in">
         <blockquote class="layui-elem-quote">
             <pre>ft1.2: result2= 2
@@ -268,7 +228,6 @@ AssertionError: '登录成功' != '登录成功！'
 </pre>
         </blockquote>
     </div>
-    <!--css div popup end-->
     </td>
 </tr>
 
@@ -279,8 +238,6 @@ AssertionError: '登录成功' != '登录成功！'
         错误</a>
     </td>
     <td colspan='5'>
-    <!--css div popup start-->
-    
     <div id='div_ft1.3' class="collapse in">
         <blockquote class="layui-elem-quote">
             <pre>ft1.3: 这是一个错误测试
@@ -291,7 +248,6 @@ IndexError: list index out of range
 </pre>
         </blockquote>
     </div>
-    <!--css div popup end-->
     </td>
 </tr>
 
@@ -318,15 +274,12 @@ IndexError: list index out of range
         通过</a>
     </td>
     <td colspan='5'>
-    <!--css div popup start-->
-    
     <div id='div_pt2.1' class="collapse in">
         <blockquote class="layui-elem-quote">
             <pre>pt2.1: test01
 </pre>
         </blockquote>
     </div>
-    <!--css div popup end-->
     </td>
 </tr>
 
@@ -337,15 +290,12 @@ IndexError: list index out of range
         通过</a>
     </td>
     <td colspan='5'>
-    <!--css div popup start-->
-    
     <div id='div_pt2.2' class="collapse in">
         <blockquote class="layui-elem-quote">
             <pre>pt2.2: test02
 </pre>
         </blockquote>
     </div>
-    <!--css div popup end-->
     </td>
 </tr>
 
