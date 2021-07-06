@@ -203,19 +203,9 @@ class HTMLTestReport(object):
         """获取汇总数据"""
         startTime = str(self.startTime)[:19]
         duration = str(self.stopTime - self.startTime)
-        status = []
-
-        if result.success_count: status.append(u'通过 %s' % result.success_count)
-        if result.failure_count: status.append(u'失败 %s' % result.failure_count)
-        if result.error_count:   status.append(u'错误 %s' % result.error_count)
-        if result.skip_count:   status.append(u'跳过 %s' % result.skip_count)
         total_count = result.success_count + result.failure_count + result.error_count + result.skip_count
-
-        if status:
-            status = ' '.join(status)
+        if total_count:
             self.passrate = str("%.2f" % (float(result.success_count) / float(total_count) * 100))
-        else:
-            status = 'none'
 
         return (startTime, duration, total_count, self.passrate, result.success_count, result.failure_count,
                 result.error_count, result.skip_count)

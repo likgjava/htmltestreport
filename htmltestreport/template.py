@@ -397,8 +397,7 @@ class Template(object):
     REPORT_TEST_OUTPUT_TMPL = r"""%(id)s: %(output)s"""  # variables: (id, output)
 
     # ENDING
-    ENDING_TMPL = """<div id='ending'>&nbsp;</div>
-    <div style=" position:fixed;right:50px; bottom:30px; width:20px; height:20px;cursor:pointer">
-    <a href="#"><span class="glyphicon glyphicon-eject" style = "font-size:30px;" aria-hidden="true">
-    </span></a></div>
+    ENDING_TMPL = """<a href="#">
+    <ul class="layui-fixbar"><li class="layui-icon layui-fixbar-top" lay-type="top" style="display: list-item;"></li></ul>
+    </a>
     """
