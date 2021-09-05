@@ -4,8 +4,8 @@ from setuptools import setup, find_packages
 
 setup(
     name="HTMLTestReport",
-    version="1.0.0",
-    keywords=("pip", "HTMLTestReport", "report"),
+    version="1.0.1",
+    keywords=["pip", "HTMLTestReport", "report"],
     description="A TestRunner for Python UnitTest",
     long_description="A TestRunner for use with the Python UnitTest framework",
     license="MIT Licence",
